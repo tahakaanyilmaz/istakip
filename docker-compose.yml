@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+
+  web:
+
+    build:
+      context: .
+      dockerfile: DockerFile
+    
+    ports: 
+      - "80:80"
+
+    volumes:
+      - .:/var/www/html
+
+    depends_on:
+      - database
+
+    networks:
+      - network_istakip
+
+  
+  database:
+
+    image: mysql:latest
+
+    ports:
+      - "3306:3306"
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456789
+      - MYSQL_DATABASE=laravel_istakip
+      - MYSQL_USER=istakip
+      - MYSQL_PASSWORD=123456
+
+    volumes:
+      - mysql_volume_istakip:/var/lib/mysql
+    
+    networks:
+      - network_istakip
+
+volumes:
+  mysql_volume_istakip:
+
+networks:
+  network_istakip:

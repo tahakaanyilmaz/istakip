@@ -1,0 +1,14 @@
+# PHP 7.2, Apache ile Laravel için resmi PHP Docker görüntüsünü kullanıyoruz
+FROM php:8.2-apache
+
+# Gerekli PHP eklentilerini yüklüyoruz
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Apache'yi etkinleştiriyoruz ve Laravel projesini /var/www/html dizinine kopyalıyoruz
+COPY . /var/www/html
+
+# Dizin sahibini Apache kullanıcısına değiştiriyoruz
+RUN chown -R www-data:www-data /var/www/html
+
+# Apache'nin sanal anahtarını etkinleştiriyoruz
+RUN a2enmod rewrite
