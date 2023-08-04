@@ -32,7 +32,7 @@ class JobResource extends Resource
                 Forms\Components\TextInput::make('job_title')
                     ->required()
                     ->maxLength(155),
-                Forms\Components\Textarea::make('job_description')
+                Forms\Components\RichEditor::make('job_description')
                     ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
