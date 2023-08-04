@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\JobResource\Pages;
 use App\Filament\Resources\JobResource\RelationManagers;
 use App\Models\Job;
-use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 
 class JobResource extends Resource
 {
@@ -27,15 +23,27 @@ class JobResource extends Resource
     {
         return $form
             ->schema([
-                Card::make('İş Detayları')
-                    ->schema([
-                        Select::make('job_user')
-                                    ->options(User::select('id', 'email')->pluck('email', 'id')),
-                        TextInput::make('job_title'),
-                        TextInput::make('job_description'),
-                        TextInput::make('job_type'),
-                        TextInput::make('job_location'),
-                    ]),
+                Forms\Components\Select::make('job_user')
+                    ->options(
+                        \App\Models\User::select('email','id')->pluck('email', 'id')->all()
+                    )
+                    ->exists(table: \App\Models\User::class, column: 'id')
+                    ->required(),
+                Forms\Components\TextInput::make('job_title')
+                    ->required()
+                    ->maxLength(155),
+                Forms\Components\Textarea::make('job_description')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('job_type')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('job_location')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -43,7 +51,19 @@ class JobResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('job_user')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('job_title')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

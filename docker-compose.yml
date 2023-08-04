@@ -19,11 +19,12 @@ services:
 
     networks:
       - network_istakip
-
   
   database:
 
     image: mysql:latest
+
+    container_name: database
 
     ports:
       - "3306:3306"

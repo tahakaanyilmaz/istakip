@@ -24,7 +24,7 @@ class Job extends Model
      * Veri sütunlarının tip kontrolü.
      */
     protected $casts = [
-        'job_user' => 'int',
+        'job_user' => 'App\Casts\in:user,id',
         'job_title' => 'string',
         'job_description' => 'string',
         'job_type' => 'string',
