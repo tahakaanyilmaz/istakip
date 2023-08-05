@@ -9,26 +9,28 @@ class Job extends Model
 {
     use HasFactory;
 
-    /**
-     * Modifikasyonuna müsaade edilen sütunlar.
-     */
     protected $fillable = [
-        'job_user',
+        'customer',
         'job_title',
+        'job_short_description',
         'job_description',
-        'job_type',
-        'job_location',
+        'job_start_date',
+        'job_end_date',
+        'job_total_price',
+        'job_payment_method',
+        'job_status',
     ];
 
-    /**
-     * Veri sütunlarının tip kontrolü.
-     */
-    protected $casts = [
-        'job_user' => 'App\Casts\in:user,id',
-        'job_title' => 'string',
-        'job_description' => 'string',
-        'job_type' => 'string',
-        'job_location' => 'string',
+    protected $rules = [
+        'customer' => 'required|exists:users,id',
+        'job_title' => 'required|string|min:10|max:150',
+        'job_short_description' =>'required|string|min:10|max:150',
+        'job_description' =>'required|string|min:10|max:150',
+        'job_start_date' =>'required|date|App\Casts\between_date:today,$job_end_date - 1 days',
+        'job_end_date' =>'required|date|App\Casts\between_date:$job_start_date + 1 days',
+        'job_total_price' => 'required|float|min:0|max:999999999',
+        'job_payment_method' =>'required|in:start,end,step-by-step',
+        'job_status' =>'required|in:in-process,awaiting,completed',
     ];
 
     public static function boot() {

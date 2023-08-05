@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('job_user');
-            $table->string('job_title', 155);
-            $table->text('job_description');
-            $table->text('job_type');
-            $table->text('job_location');
-            $table->timestamps();
-
-            $table->foreign('job_user')->references('id')->on('users');
+            $table->unsignedBigInteger('customer');
+            $table->string('job_title', 150);
+            $table->string('job_short_description', 250);
+            $table->string('job_description', 10000);
+            $table->timestamp('job_start_date');
+            $table->timestamp('job_end_date');
+            $table->float('job_total_price');
+            $table->enum('job_payment_method', ['start', 'end', 'step-by-step']);
+            $table->enum('job_status', ['in-process', 'awaiting', 'completed']);
+            
+            $table->foreign('customer')->references('id')->on('users');
         });
     }
 
